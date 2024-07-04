@@ -64,17 +64,18 @@ public class JobService {
         }
 
         for (FileRef fileRef : fileRefs) {
+            logger.info("Processing file: " + fileRef.getFileName());
+            fileRef.setFlagLoader(1);
+            fileRefRepository.save(fileRef);
+            logger.info("load file : " + fileRef.getFileName() + " processing");
+
+
             try {
                 Path path = Paths.get(fileDirectory + fileRef.getFileName());
                 InputStream inputStream = Files.newInputStream(path);
                 Workbook workbook = new XSSFWorkbook(inputStream);
                 Sheet sheet = workbook.getSheet(SHEET);
                 Iterator<Row> rows = sheet.iterator();
-
-                logger.info("Processing file: " + fileRef.getFileName());
-                fileRef.setFlagLoader(1);
-                fileRefRepository.save(fileRef);
-                logger.info("load file : " + fileRef.getFileName() + " processing");
 
                 int rowNumber = 0;
 
