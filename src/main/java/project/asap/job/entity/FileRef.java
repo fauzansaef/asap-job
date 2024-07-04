@@ -23,4 +23,6 @@ public class FileRef extends AuditEntity {
     private LocalDateTime deletedAt;
     @Column(name = "flag_loader")
     private Integer flagLoader;
+    @Column(name = "nip_petugas")
+    private String nipPetugas;
 }

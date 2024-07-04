@@ -2,34 +2,23 @@ package project.asap.job.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 
 @Entity
-@Table(name = "arsip")
-@SQLDelete(sql = "UPDATE arsip SET deleted_at = current_timestamp WHERE id = ?")
-@Where(clause = "deleted_at is null")
+@Table(name = "penyimpanan_mapping")
 @Data
-public class Arsip extends AuditEntity {
+public class PenyimpananMapping extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Column(name = "id_tipe_arsip")
-    private Long idTipeArsip;
-    @Column(name = "kode")
-    private String kode;
-    @Column(name = "nama")
-    private String nama;
-    @Column(name = "tahun")
-    private String tahun;
-    @Column(name = "deskripsi")
-    private String deskripsi;
-    @Column(name = "jumlah_lembar")
-    private Integer jumlahLembar;
-    @Column(name = "file")
-    private String file;
+    @Column(name = "id_bmn")
+    private Long idBmn;
+    @Column(name = "id_atk")
+    private Long idAtk;
+    @Column(name = "id_arsip")
+    private Long idArsip;
     @Column(name = "id_gudang")
     private Long idGudang;
     @Column(name = "id_lemari")
@@ -38,20 +27,20 @@ public class Arsip extends AuditEntity {
     private Long idRak;
     @Column(name = "id_box")
     private Long idBox;
-    @Column(name = "kode_lokasi")
-    private String kodeLokasi;
-    @Column(name = "deleted_at")
-    private String deletedAt;
-    @Column(name = "status")
-    private Integer status;
-    @Column(name = "nip_petugas")
-    private String nipPetugas;
-    @Column(name = "no_dokumen")
-    private String noDokumen;
+    @Column(name = "kode_batch")
+    private String kodeBatch;
     @JsonIgnore
-    @JoinColumn(name = "id_tipe_arsip", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "id_bmn", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne
-    private RefTipeArsip refTipeArsip;
+    Bmns bmns;
+    @JsonIgnore
+    @JoinColumn(name = "id_atk", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne
+    Atks atks;
+    @JsonIgnore
+    @JoinColumn(name = "id_arsip", referencedColumnName = "id", insertable = false, updatable = false)
+    @ManyToOne
+    Arsip arsip;
     @JsonIgnore
     @JoinColumn(name = "id_gudang", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne
