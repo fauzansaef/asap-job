@@ -35,6 +35,8 @@ public class Bmns extends AuditEntity {
     private String tahunPengadaan;
     @Column(name = "stock")
     private Integer stock;
+    @Column(name = "kode_lokasi")
+    private String kodeLokasi;
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 

@@ -46,8 +46,6 @@ public class Arsip extends AuditEntity {
     private Integer status;
     @Column(name = "nip_petugas")
     private String nipPetugas;
-    @Column(name = "no_dokumen")
-    private String noDokumen;
     @JsonIgnore
     @JoinColumn(name = "id_tipe_arsip", referencedColumnName = "id", insertable = false, updatable = false)
     @ManyToOne

@@ -26,6 +26,8 @@ public class Atks extends AuditEntity {
     private Integer stock;
     @Column(name = "harga")
     private String harga;
+    @Column(name = "kode_lokasi")
+    private String kodeLokasi;
     @JsonIgnore
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;

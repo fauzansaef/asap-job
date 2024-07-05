@@ -51,8 +51,7 @@ public class JobService {
     }
 
 
-    //    @Scheduled(cron = "0 */5 * * * ?") // This will run every 5 minutes
-    @Scheduled(cron = "0 * * * * ?") // This will run every minute
+    @Scheduled(cron = "0 */5 * * * ?") // This will run every 5 minutes
     @Async
     @Transactional
     public void runJob() {
@@ -190,7 +189,7 @@ public class JobService {
                     if (kodeIsiBatch.equals("BERKAS")) {
                         arsip.setKodeLokasi(kodeBatch);
                         arsip.setTahun(tahun);
-                        arsip.setNoDokumen(keterangan);
+                        arsip.setNama(keterangan);
                         arsip.setJumlahLembar(jumlah);
                         arsip.setNipPetugas(fileRef.getNipPetugas());
                         arsipRepository.save(arsip);
@@ -209,7 +208,10 @@ public class JobService {
                     }
 
                     if (kodeIsiBatch.equals("BMN")) {
-                        //bmn
+                        bmns.setNamaBmn(keterangan);
+                        bmns.setTahun(tahun);
+                        bmns.setStock(jumlah);
+                        bmns.setKodeLokasi(kodeBatch);
                     }
                 }
 
