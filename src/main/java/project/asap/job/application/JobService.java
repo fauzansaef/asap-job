@@ -54,7 +54,7 @@ public class JobService {
     }
 
 
-    @Scheduled(cron = "0 */5 * * * ?") // This will run every 5 minutes
+    @Scheduled(cron = "${trigger.job.cron}")
     @Async
     @Transactional
     public void runJob() {
@@ -263,6 +263,7 @@ public class JobService {
                                 failedJobsExcel.setFailedAt(LocalDateTime.now());
                                 failedJobsExcel.setFileName(fileRef.getFileName());
                                 failedJobsExcel.setRow(rowNumber);
+                                failedJobsExcel.setIdFileRef(fileRef.getId());
                                 failedJobsExcelRepository.save(failedJobsExcel);
                                 logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
                                 break;
@@ -270,7 +271,6 @@ public class JobService {
 
 
                     } catch (Exception e) {
-                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error", e);
                         FailedJobsExcel failedJobsExcel = new FailedJobsExcel();
                         failedJobsExcel.setKodeBatch(kodeBatch);
                         failedJobsExcel.setKeterangan(keterangan);
@@ -278,7 +278,9 @@ public class JobService {
                         failedJobsExcel.setFailedAt(LocalDateTime.now());
                         failedJobsExcel.setFileName(fileRef.getFileName());
                         failedJobsExcel.setRow(rowNumber);
+                        failedJobsExcel.setIdFileRef(fileRef.getId());
                         failedJobsExcelRepository.save(failedJobsExcel);
+                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error", e);
 
                     }
 

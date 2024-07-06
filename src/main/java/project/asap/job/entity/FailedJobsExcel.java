@@ -1,5 +1,6 @@
 package project.asap.job.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,4 +26,10 @@ public class FailedJobsExcel {
     private String fileName;
     @Column(name = "row")
     private Integer row;
+    @Column(name = "id_file_ref")
+    private Long idFileRef;
+    @ManyToOne
+    @JoinColumn(name = "id_file_ref", insertable = false, updatable = false)
+    @JsonIgnore
+    private FileRef fileRef;
 }
