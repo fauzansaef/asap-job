@@ -13,7 +13,7 @@ public class Atks extends AuditEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @Column(name = "kode")
     private String kode;
     @Column(name = "nama_atk")
@@ -28,6 +28,8 @@ public class Atks extends AuditEntity {
     private String harga;
     @Column(name = "kode_lokasi")
     private String kodeLokasi;
+    @Column(name = "tahun")
+    private String tahun;
     @JsonIgnore
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
