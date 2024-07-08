@@ -25,4 +25,8 @@ public class FileRef extends AuditEntity {
     private Integer flagLoader;
     @Column(name = "nip_petugas")
     private String nipPetugas;
+    @Column(name = "total_row_berhasil")
+    private Integer totalRowBerhasil;
+    @Column(name = "total_row_gagal")
+    private Integer totalRowGagal;
 }

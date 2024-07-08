@@ -80,6 +80,8 @@ public class JobService {
                 Iterator<Row> rows = sheet.iterator();
 
                 int rowNumber = 0;
+                int totalRowBerhasil = 0;
+                int totalRowGagal = 0;
 
                 while (rows.hasNext()) {
                     Gudang gudang = new Gudang();
@@ -206,6 +208,7 @@ public class JobService {
                                 arsip.setNama(keterangan);
                                 arsip.setJumlahLembar(jumlah);
                                 arsip.setNipPetugas(fileRef.getNipPetugas());
+                                arsip.setStatus(1); //disimpan
                                 arsipRepository.save(arsip);
 
                                 penyimpananMapping.setIdArsip(arsip.getId());
@@ -215,6 +218,7 @@ public class JobService {
                                 penyimpananMapping.setIdBox(box.getId());
                                 penyimpananMapping.setKodeBatch(kodeBatch);
                                 penyimpananMappingRepository.save(penyimpananMapping);
+                                totalRowBerhasil++;
                                 logger.info("load file : " + fileRef.getFileName() + " row : " + rowNumber + " success");
                                 break;
                             case "ATK":
@@ -234,6 +238,7 @@ public class JobService {
                                 penyimpananMapping.setIdBox(box.getId());
                                 penyimpananMapping.setKodeBatch(kodeBatch);
                                 penyimpananMappingRepository.save(penyimpananMapping);
+                                totalRowBerhasil++;
                                 logger.info("load file : " + fileRef.getFileName() + " row : " + rowNumber + " success");
                                 break;
                             case "BMN":
@@ -253,6 +258,7 @@ public class JobService {
                                 penyimpananMapping.setIdBox(box.getId());
                                 penyimpananMapping.setKodeBatch(kodeBatch);
                                 penyimpananMappingRepository.save(penyimpananMapping);
+                                totalRowBerhasil++;
                                 logger.info("load file : " + fileRef.getFileName() + " row : " + rowNumber + " success");
                                 break;
                             default:
@@ -265,6 +271,7 @@ public class JobService {
                                 failedJobsExcel.setRow(rowNumber);
                                 failedJobsExcel.setIdFileRef(fileRef.getId());
                                 failedJobsExcelRepository.save(failedJobsExcel);
+                                totalRowGagal++;
                                 logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
                                 break;
                         }
@@ -280,6 +287,7 @@ public class JobService {
                         failedJobsExcel.setRow(rowNumber);
                         failedJobsExcel.setIdFileRef(fileRef.getId());
                         failedJobsExcelRepository.save(failedJobsExcel);
+                        totalRowGagal++;
                         logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error", e);
 
                     }
@@ -290,10 +298,14 @@ public class JobService {
                 workbook.close();
 
                 fileRef.setFlagLoader(2);
+                fileRef.setTotalRowBerhasil(totalRowBerhasil);
+                fileRef.setTotalRowGagal(totalRowGagal);
                 fileRefRepository.save(fileRef);
                 logger.info("load file : " + fileRef.getFileName() + " finished");
 
             } catch (Exception e) {
+                fileRef.setFlagLoader(3);
+                fileRefRepository.save(fileRef);
                 logger.error("error reading excel file : " + fileRef.getFileName(), e);
             }
 
