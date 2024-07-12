@@ -173,24 +173,47 @@ public class JobService {
                                     break;
 
                                 case 1:
-                                    kodeIsiBatch = currentCell.getStringCellValue();
+                                    if (currentCell.getCellType() == CellType.STRING) {
+                                        kodeIsiBatch = currentCell.getStringCellValue();
+                                    } else {
+                                        saveFailedJobsExcel(kodeBatch, keterangan, "Kode Isi Batch harus berupa string", LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
+                                        totalRowGagal++;
+                                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
+                                    }
+
                                     break;
 
                                 case 2:
-                                    keterangan = currentCell.getStringCellValue();
+                                    if (currentCell.getCellType() == CellType.STRING) {
+                                        keterangan = currentCell.getStringCellValue();
+                                    } else {
+                                        saveFailedJobsExcel(kodeBatch, keterangan, "Keterangan harus berupa string", LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
+                                        totalRowGagal++;
+                                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
+                                    }
+
                                     break;
 
                                 case 3:
-
                                     if (currentCell.getCellType() == CellType.STRING) {
                                         tahun = String.valueOf(currentCell.getStringCellValue());
                                     } else if (currentCell.getCellType() == CellType.NUMERIC) {
                                         tahun = String.valueOf((int) currentCell.getNumericCellValue());
+                                    } else {
+                                        saveFailedJobsExcel(kodeBatch, keterangan, "Tahun bukan berupa angka", LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
+                                        totalRowGagal++;
+                                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
                                     }
                                     break;
 
                                 case 4:
-                                    jumlah = (int) currentCell.getNumericCellValue();
+                                    if (currentCell.getCellType() == CellType.NUMERIC) {
+                                        jumlah = (int) currentCell.getNumericCellValue();
+                                    } else {
+                                        saveFailedJobsExcel(kodeBatch, keterangan, "Jumlah bukan berupa angka", LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
+                                        totalRowGagal++;
+                                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
+                                    }
                                     break;
 
                                 default:
@@ -262,15 +285,7 @@ public class JobService {
                                 logger.info("load file : " + fileRef.getFileName() + " row : " + rowNumber + " success");
                                 break;
                             default:
-                                FailedJobsExcel failedJobsExcel = new FailedJobsExcel();
-                                failedJobsExcel.setKodeBatch(kodeBatch);
-                                failedJobsExcel.setKeterangan(keterangan);
-                                failedJobsExcel.setErrorMessage("Kode Isi Batch tidak dikenali");
-                                failedJobsExcel.setFailedAt(LocalDateTime.now());
-                                failedJobsExcel.setFileName(fileRef.getFileName());
-                                failedJobsExcel.setRow(rowNumber);
-                                failedJobsExcel.setIdFileRef(fileRef.getId());
-                                failedJobsExcelRepository.save(failedJobsExcel);
+                                saveFailedJobsExcel(kodeBatch, keterangan, "Kode Isi Batch tidak dikenali", LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
                                 totalRowGagal++;
                                 logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
                                 break;
@@ -278,15 +293,7 @@ public class JobService {
 
 
                     } catch (Exception e) {
-                        FailedJobsExcel failedJobsExcel = new FailedJobsExcel();
-                        failedJobsExcel.setKodeBatch(kodeBatch);
-                        failedJobsExcel.setKeterangan(keterangan);
-                        failedJobsExcel.setErrorMessage(e.getMessage());
-                        failedJobsExcel.setFailedAt(LocalDateTime.now());
-                        failedJobsExcel.setFileName(fileRef.getFileName());
-                        failedJobsExcel.setRow(rowNumber);
-                        failedJobsExcel.setIdFileRef(fileRef.getId());
-                        failedJobsExcelRepository.save(failedJobsExcel);
+                        saveFailedJobsExcel(kodeBatch, keterangan, e.getMessage(), LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
                         totalRowGagal++;
                         logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error", e);
 
@@ -312,4 +319,18 @@ public class JobService {
         }
 
     }
+
+    private void saveFailedJobsExcel(String kodeBatch, String keterangan, String errorMessage, LocalDateTime failedAt, String fileName, int rowNumber, Long idFileRef) {
+        FailedJobsExcel failedJobsExcel = new FailedJobsExcel();
+        failedJobsExcel.setKodeBatch(kodeBatch);
+        failedJobsExcel.setKeterangan(keterangan);
+        failedJobsExcel.setErrorMessage(errorMessage);
+        failedJobsExcel.setFailedAt(failedAt);
+        failedJobsExcel.setFileName(fileName);
+        failedJobsExcel.setRow(rowNumber);
+        failedJobsExcel.setIdFileRef(idFileRef);
+        failedJobsExcelRepository.save(failedJobsExcel);
+    }
+
+
 }
