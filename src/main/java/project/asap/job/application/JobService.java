@@ -128,46 +128,58 @@ public class JobService {
                             Cell currentCell = cellsInRow.next();
                             switch (cellIdx) {
                                 case 0:
-                                    kodeBatch = currentCell.getStringCellValue();
-                                    String[] parts = kodeBatch.split("\\.");
-                                    String codeGudang = parts[0];
-                                    String codeLemari = parts[1];
-                                    String codeRak = parts[2];
-                                    String codeBox = parts[3];
-
-                                    if (!gudangRepository.findByCode(codeGudang).isPresent()) {
-                                        gudang.setCode(codeGudang);
-                                        gudang.setNama(codeGudang);
-                                        gudangRepository.save(gudang);
-                                    } else {
-                                        gudang = gudangRepository.findByCode(codeGudang).get();
+                                    if (currentCell.getCellType() != CellType.STRING) {
+                                        saveFailedJobsExcel(kodeBatch, keterangan, "Kode Batch harus berupa string", LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
+                                        totalRowGagal++;
+                                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error");
                                     }
 
-                                    if (!lemariRepository.findByCode(codeLemari).isPresent()) {
-                                        lemari.setCode(codeLemari);
-                                        lemari.setNama(codeLemari);
-                                        lemari.setIdGudang(gudang.getId());
-                                        lemariRepository.save(lemari);
-                                    } else {
-                                        lemari = lemariRepository.findByCode(codeLemari).get();
-                                    }
+                                    try {
+                                        kodeBatch = currentCell.getStringCellValue();
+                                        String[] parts = kodeBatch.split("\\.");
+                                        String codeGudang = parts[0];
+                                        String codeLemari = parts[1];
+                                        String codeRak = parts[2];
+                                        String codeBox = parts[3];
 
-                                    if (!rakRepository.findByCode(codeRak).isPresent()) {
-                                        rak.setCode(codeRak);
-                                        rak.setIdLemari(lemari.getId());
-                                        rak.setNama(codeRak);
-                                        rakRepository.save(rak);
-                                    } else {
-                                        rak = rakRepository.findByCode(codeRak).get();
-                                    }
+                                        if (!gudangRepository.findByCode(codeGudang).isPresent()) {
+                                            gudang.setCode(codeGudang);
+                                            gudang.setNama(codeGudang);
+                                            gudangRepository.save(gudang);
+                                        } else {
+                                            gudang = gudangRepository.findByCode(codeGudang).get();
+                                        }
 
-                                    if (!boxRepository.findByCode(codeBox).isPresent()) {
-                                        box.setCode(codeBox);
-                                        box.setIdRak(rak.getId());
-                                        box.setNama(codeBox);
-                                        boxRepository.save(box);
-                                    } else {
-                                        box = boxRepository.findByCode(codeBox).get();
+                                        if (!lemariRepository.findByCode(codeLemari).isPresent()) {
+                                            lemari.setCode(codeLemari);
+                                            lemari.setNama(codeLemari);
+                                            lemari.setIdGudang(gudang.getId());
+                                            lemariRepository.save(lemari);
+                                        } else {
+                                            lemari = lemariRepository.findByCode(codeLemari).get();
+                                        }
+
+                                        if (!rakRepository.findByCode(codeRak).isPresent()) {
+                                            rak.setCode(codeRak);
+                                            rak.setIdLemari(lemari.getId());
+                                            rak.setNama(codeRak);
+                                            rakRepository.save(rak);
+                                        } else {
+                                            rak = rakRepository.findByCode(codeRak).get();
+                                        }
+
+                                        if (!boxRepository.findByCode(codeBox).isPresent()) {
+                                            box.setCode(codeBox);
+                                            box.setIdRak(rak.getId());
+                                            box.setNama(codeBox);
+                                            boxRepository.save(box);
+                                        } else {
+                                            box = boxRepository.findByCode(codeBox).get();
+                                        }
+                                    } catch (Exception e) {
+                                        saveFailedJobsExcel(kodeBatch, keterangan, e.getMessage(), LocalDateTime.now(), fileRef.getFileName(), rowNumber, fileRef.getId());
+                                        totalRowGagal++;
+                                        logger.error("load file : " + fileRef.getFileName() + " row : " + rowNumber + " error : " + e.getMessage());
                                     }
 
                                     break;
