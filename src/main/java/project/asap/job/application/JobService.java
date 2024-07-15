@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 @Component
@@ -224,14 +225,18 @@ public class JobService {
 
                         LocalDate now = LocalDate.now();
                         String kode = "";
+                        Random random = new Random();
+                        int randomNumber = random.nextInt(9000) + 1000;
                         switch (kodeIsiBatch) {
                             case "BERKAS":
+                                kode = "ARSIP-" + now.getYear() + now.getMonthValue() + now.getDayOfMonth() + "-" + randomNumber;
                                 arsip.setKodeLokasi(kodeBatch);
                                 arsip.setTahun(tahun);
                                 arsip.setNama(keterangan);
                                 arsip.setJumlahLembar(jumlah);
                                 arsip.setNipPetugas(fileRef.getNipPetugas());
                                 arsip.setStatus(1); //disimpan
+                                arsip.setKode(kode);
                                 arsipRepository.save(arsip);
 
                                 penyimpananMapping.setIdArsip(arsip.getId());
@@ -245,7 +250,7 @@ public class JobService {
                                 logger.info("load file : " + fileRef.getFileName() + " row : " + rowNumber + " success");
                                 break;
                             case "ATK":
-                                kode = "ATK-" + now.getYear() + now.getMonthValue() + now.getDayOfMonth() + "-" + UUID.randomUUID();
+                                kode = "ATK-" + now.getYear() + now.getMonthValue() + now.getDayOfMonth() + "-" + randomNumber;
                                 atks.setNamaAtk(keterangan);
                                 atks.setTahun(tahun);
                                 atks.setStock(jumlah);
@@ -265,7 +270,7 @@ public class JobService {
                                 logger.info("load file : " + fileRef.getFileName() + " row : " + rowNumber + " success");
                                 break;
                             case "BMN":
-                                kode = "BMN-" + now.getYear() + now.getMonthValue() + now.getDayOfMonth() + "-" + UUID.randomUUID();
+                                kode = "BMN-" + now.getYear() + now.getMonthValue() + now.getDayOfMonth() + "-" + randomNumber;
                                 bmns.setNamaBmn(keterangan);
                                 bmns.setTahun(tahun);
                                 bmns.setStock(jumlah);
