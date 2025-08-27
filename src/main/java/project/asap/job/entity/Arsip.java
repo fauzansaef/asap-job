@@ -16,6 +16,8 @@ public class Arsip extends AuditEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Column(name = "kode_kantor")
+    private String kodeKantor;
     @Column(name = "id_tipe_arsip")
     private Long idTipeArsip;
     @Column(name = "kode")

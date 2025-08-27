@@ -14,6 +14,8 @@ public class Rak extends AuditEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Column(name = "kode_kantor")
+    private String kodeKantor;
     @Column(name = "nama")
     private String nama;
     @Column(name = "code")

@@ -24,10 +24,12 @@ public class FailedJobsExcel {
     private LocalDateTime failedAt;
     @Column(name = "file_name")
     private String fileName;
-    @Column(name = "row")
+    @Column(name = "`row`") // Pakai backtick untuk reserved keyword
     private Integer row;
     @Column(name = "id_file_ref")
     private Long idFileRef;
+    @Column(name = "kode_kantor")
+    private String kodeKantor;
     @ManyToOne
     @JoinColumn(name = "id_file_ref", insertable = false, updatable = false)
     @JsonIgnore

@@ -29,4 +29,6 @@ public class FileRef extends AuditEntity {
     private Integer totalRowBerhasil;
     @Column(name = "total_row_gagal")
     private Integer totalRowGagal;
+    @Column(name = "kode_kantor")
+    private String kodeKantor;
 }

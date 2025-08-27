@@ -14,6 +14,8 @@ public class Atks extends AuditEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Column(name = "kode_kantor")
+    private String kodeKantor;
     @Column(name = "kode")
     private String kode;
     @Column(name = "nama_atk")

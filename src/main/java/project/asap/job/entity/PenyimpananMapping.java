@@ -13,6 +13,8 @@ public class PenyimpananMapping extends AuditEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    @Column(name = "kode_kantor")
+    private String kodeKantor;
     @Column(name = "id_bmn")
     private Long idBmn;
     @Column(name = "id_atk")
